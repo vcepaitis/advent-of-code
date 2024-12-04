@@ -12,7 +12,7 @@ days = range(1, current_day+1)
 base_url = "https://adventofcode.com"
 
 with open("session-cookie") as session_cookie_file:
-    session_cookie = session_cookie_file.readline()
+    session_cookie = session_cookie_file.readline().strip()
     cookies = {
         "session": session_cookie
     }
