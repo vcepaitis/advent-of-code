@@ -20,18 +20,16 @@ def try_iteratively(inputs, current, output):
 
 
 def try_iteratively_concat(inputs, current, output):
-
     next_input = inputs[0]
     joined = int(f"{current}{next_input}")
-    if current * next_input == output:
-        return True
-    elif current + next_input == output:
-        return True
-    elif len(inputs) == 1:
+    if len(inputs) == 1:
+        if current * next_input == output:
+            return True
+        if current + next_input == output:
+            return True
         if joined == output:
             return True
-        else:
-            return False
+
     else:
         if try_iteratively_concat(inputs[1:], current * next_input, output):
             return True
@@ -40,7 +38,6 @@ def try_iteratively_concat(inputs, current, output):
         if try_iteratively_concat(inputs[1:], joined, output):
             return True
     return False
-
 
 with open("input") as f:
     # sum = 0
