@@ -34,26 +34,30 @@ for x in range(data.shape[0]):
             freq_dict[freq].append((x, y))
 
 freq_dict = {freq: positions for freq, positions in freq_dict.items() if len(positions) > 1}
-output_data = data
 antinodes = defaultdict(None)
 antinodes_2 = defaultdict(None)
+
 for x in range(data.shape[0]):
     for y in range(data.shape[1]):
         pos = (x, y)
         # get distances 
         for freq, test_positions in freq_dict.items():
             # Get all combinations of two antennas
-            # (7, 6) -4 -2 -2 -1
             for pos1, pos2 in combinations(test_positions, 2):
                 dx1 = pos1[0] - x
                 dy1 = pos1[1] - y
                 dx2 = pos2[0] - x
                 dy2 = pos2[1] - y
-                if (dx1 * 2 == dx2) and (dy1 * 2 == dy2) \
+                if ((dx1 * 2 == dx2) and (dy1 * 2 == dy2)) \
                 or ((dx2 * 2 == dx1) and (dy2 * 2 == dy1)):
                     antinodes[pos] = True
-                    output_data[pos] = "#"
+                if dx1 != 0 and dy1 != 0:
+                    if dx2/dx1 == dy2/dy1:
+                        antinodes_2[pos] = True 
+                if dx2 != 0 and dy2 != 0:
+                    if dx1/dx2 == dy1/dy2:
+                        antinodes_2[pos] = True
 
-# print(output_data)
-print(antinodes)
+
 print(len(antinodes))
+print(len(antinodes_2))
