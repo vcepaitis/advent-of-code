@@ -25,7 +25,7 @@ for input in diskmap:
     if free:
         disk.extend("."*int(input))
     else:
-        disk.extend(str(id)*int(input))
+        disk.extend([str(id)]*int(input))
         id += 1
 
     free = not free
@@ -33,6 +33,7 @@ for input in diskmap:
 print(disk)
 disk = np.asarray(disk)
 disk = sort_disk(disk)
+print()
 with open("output", "w") as f:
     print("".join(disk), file=f)
 checksum = 0
