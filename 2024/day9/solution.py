@@ -20,7 +20,7 @@ def sort_disk(disk):
             
     return disk
 
-# @njit
+@njit
 def defragment_disk(disk):
     ndisk = len(disk)
     i = 0
@@ -33,6 +33,8 @@ def defragment_disk(disk):
         if test != ".":
             i += 1
             continue
+        else:
+            i_start = i
         file = disk[j]
         # move file at most once
         if file in moved:
@@ -58,18 +60,18 @@ def defragment_disk(disk):
                     for n in range(nreq):
                         disk[ifree+n] = file
                         disk[j-n] = "."
-                    i = 0
+                    i = i_start
                     moved.append(file)
                     break
                 # increment free disk space counter
                 if disk[k] == ".":
-                    if not ifree:
+                    if ifree == -1:
                         ifree = k
                     nfree += 1
                 # reset free disk space counter
                 else:
                     nfree = 0
-                    ifree = None
+                    ifree = -1
             # check next file
             j -= nreq
 
@@ -78,7 +80,7 @@ def defragment_disk(disk):
 
 diskmap = str(12345)
 diskmap = str(2333133121414131402)
-# diskmap = open("input").readline().strip()
+diskmap = open("input").readline().strip()
 disk = []
 
 free = False
