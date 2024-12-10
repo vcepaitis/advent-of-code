@@ -1,4 +1,6 @@
 import numpy as np
+import sys
+np.set_printoptions(threshold=sys.maxsize)
 from numba import njit
 from collections import defaultdict
 
@@ -18,7 +20,7 @@ def sort_disk(disk):
             
     return disk
 
-@njit
+# @njit
 def defragment_disk(disk):
     ndisk = len(disk)
     i = 0
@@ -27,47 +29,47 @@ def defragment_disk(disk):
 
     while j >= i:
         test = disk[i]
+        # find the first empty space
         if test != ".":
             i += 1
             continue
         file = disk[j]
-
+        # move file at most once
         if file in moved:
             # print("Already moved")
             j -= 1
             continue
+        # go until non-empty space found
         elif file == ".":
             j -= 1
         else:
+            # number of required free spaces
             nreq = 1
             while disk[j-nreq] == file:
                 nreq += 1
-            print(f"found {file} of length {nreq}. Checking if there's space starting from {i}")
-            nfreemax = 0
-            ifreemax = i
+            # print(f"found file id {file} of length {nreq}. Checking if there's space starting from {i}")
+            # find if any free space can be used
             nfree = 0
             ifree = i
             for k in range(i, j-nreq):
-                if nreq <= nfreemax:
+                if nreq <= nfree:
                     # swapping
                     # print("Found enough space")
                     for n in range(nreq):
-                        disk[ifreemax+n] = file
+                        disk[ifree+n] = file
                         disk[j-n] = "."
-                    # print("new disk", disk)
                     i = 0
                     moved.append(file)
                     break
+                # increment free disk space counter
                 if disk[k] == ".":
+                    if not ifree:
+                        ifree = k
                     nfree += 1
+                # reset free disk space counter
                 else:
-                    if nfree > nfreemax:
-                        ifreemax = ifree
-                        nfreemax = nfree
                     nfree = 0
-                    ifree = k+1
-            # print(f"Found {nfreemax} space starting at {ifreemax}")
-            # print("Going to next file")
+                    ifree = None
             # check next file
             j -= nreq
 
@@ -75,8 +77,8 @@ def defragment_disk(disk):
         
 
 diskmap = str(12345)
-diskmap = str(233313312141413140231083)
-diskmap = open("input").readline().strip()
+diskmap = str(2333133121414131402)
+# diskmap = open("input").readline().strip()
 disk = []
 
 free = False
@@ -91,9 +93,7 @@ for input in diskmap:
     free = not free
 
 disk = np.asarray(disk)
-print(disk)
 disk = defragment_disk(disk)
-print(disk)
 checksum = 0
 
 for i, x in enumerate(disk):
