@@ -53,10 +53,9 @@ def defragment_disk(disk):
             # find if any free space can be used
             nfree = 0
             ifree = i
-            for k in range(i, j-nreq):
+            for k in range(i, j):
                 if nreq <= nfree:
                     # swapping
-                    # print("Found enough space")
                     for n in range(nreq):
                         disk[ifree+n] = file
                         disk[j-n] = "."
@@ -76,7 +75,7 @@ def defragment_disk(disk):
             j -= nreq
 
     return disk
-        
+
 
 diskmap = str(12345)
 diskmap = str(2333133121414131402)
