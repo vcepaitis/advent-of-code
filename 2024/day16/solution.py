@@ -15,7 +15,7 @@ def get_node_distance(node1, node2):
 if len(sys.argv) == 2:
     f = sys.argv[1]
 else:
-    f = "test_input"
+    f = "input"
 
 grid = read_grid(f)
 print(grid)
@@ -36,7 +36,7 @@ distances = {start: 0, end: 1e15}
 previous = defaultdict(list)
 directions = defaultdict(list)
 # east
-directions[start] = [(0, -1)]
+directions[start] = [(0, 1)]
 # 2: Assign to every node a distance from start value: for the starting node, it is zero, and for all other nodes, it is infinity, since initially no path is known to these nodes. During execution, the distance of a node N is the length of the shortest path discovered so far between the starting node and N.
 for ix, iy in np.ndindex(grid.shape):
     if grid[ix, iy] == ".":
@@ -103,4 +103,4 @@ seen = walk_back(previous[end], [start, end])
 print(grid_print)
 with open("output", "w") as f:
     print(grid_print, file=f)
-print(len(seen))
+print(f"Part1: {distances[end]}, part 2: {len(seen)}")
