@@ -1,5 +1,13 @@
 import numpy as np
 
+def read_line_by_line(file_path):
+    data = []
+    with open(file_path) as f:
+        for line in f:
+            line = line.strip()
+            data.append(line)
+    return data
+
 def read_grid(file_path):
     data = []
     with open(file_path) as f:

@@ -4,7 +4,7 @@ import datetime
 import os
 import requests
 
-year = "2024"
+year = "2025"
 
 current_day = datetime.date.today().day
 days = range(1, current_day+1)
