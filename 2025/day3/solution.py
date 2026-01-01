@@ -6,21 +6,37 @@ from utils import read_line_by_line
 data = read_line_by_line("input")
 joltage_sum = 0
 
-# def get_max_subsequence(bank):
 
+def get_max_joltage_configuration(bank: list, length: int, batteries: list):
+    if length == 1:
+        max_index = np.argmax(bank)
+        batteries.append(bank[max_index])
+        return batteries
+    else:
+        allowed_batteries = bank[:-length+1]
+        max_index = np.argmax(allowed_batteries, keepdims=True)[0]
+        batteries.append(bank[max_index])
+        sub_bank = bank[max_index+1:]
+        return get_max_joltage_configuration(sub_bank, length-1, batteries)
+    
+
+def get_configuration_joltage(configuration: list):
+    joltage = 0
+    for i in range(len(configuration)):
+        joltage += configuration[i] * (10 ** ( len(configuration) - i - 1))
+    return joltage
+
+joltage_sum_1 = 0
+joltage_sum_2 = 0
 
 for bank in data:
     bank = np.asarray([int(b) for b in bank])
-    max_indices = np.argmax(bank[:-1], keepdims=True)
-    max_value = np.max(bank[:-1])
-    joltages = []
-    for max_index in max_indices:
-        subset = bank[max_index+1:]
-        max_subset = np.max(subset)
-        joltages.append(max_value*10+max_subset)
-    max_joltage = np.max(joltages)
-    joltage_sum += max_joltage
+    batteries_1 = get_max_joltage_configuration(bank, 2, []) 
+    batteries_2 = get_max_joltage_configuration(bank, 12, [])
+    joltage_1 = get_configuration_joltage(batteries_1)
+    joltage_2 = get_configuration_joltage(batteries_2)
+    joltage_sum_1 += joltage_1
+    joltage_sum_2 += joltage_2
 
-print(joltage_sum) # 17383 for part 1
-    # print(bank, bank[:-1], max_indices, joltages)
+print(joltage_sum_1, joltage_sum_2)
 
