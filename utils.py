@@ -15,7 +15,6 @@ def read_grid(file_path):
             line = line.strip()
             line = list(line)
             data.append(line)
-            print(line)
     data = np.asarray(data, dtype="str")
     return data
 
